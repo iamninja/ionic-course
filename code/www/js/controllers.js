@@ -4,7 +4,7 @@ angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 /*
 Controller for the discover page
 */
-.controller('DiscoverCtrl', function($scope) {
+.controller('DiscoverCtrl', function($scope, $timeout) {
 	// Add some songs maually
 	$scope.songs = [
 		{
@@ -31,9 +31,16 @@ Controller for the discover page
 
 	// Executed when we skip/fav a song
 	$scope.sendFeedback = function (bool) {
+		// Set variables for the correct animation sequence
+		$scope.currentSong.rated = bool;
+		$scope.currentSong.hide = true;
+
 		// Set the current song to one of the songs in array
-		var randomSong = Math.round(Math.random() * ($scope.songs.length - 1));
-		$scope.currentSong = angular.copy($scope.songs[randomSong]);
+		// timeout to allow animation to complete before change to next song
+		$timeout(function () {
+			var randomSong = Math.round(Math.random() * ($scope.songs.length - 1));
+			$scope.currentSong = angular.copy($scope.songs[randomSong]);
+		}, 250);
 	}
 })
 
