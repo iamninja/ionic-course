@@ -17,4 +17,30 @@ angular.module('songhop.services', [])
 	}
 
 	return o;
+})
+.factory('Recommendations', function($http, SERVER){
+	var o = {
+		queue: []
+	};
+
+	o.getNextSongs = function() {
+		return $http({
+			method: 'GET',
+			url: SERVER.url + '/recommendations'
+		}).success(function(data) {
+			o.queue = o.queue.concat(data);
+		});
+	}
+
+	o.nextSong = function() {
+		// pop the index 0 off
+		o.queue.shift();
+
+		// if queue<=3 fill it
+		if (o.queue.length <= 3) {
+			o.getNextSongs();
+		}
+	}
+
+	return o;
 });
