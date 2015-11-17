@@ -20,6 +20,10 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
   });
 })
 
+.config(function($ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('bottom');
+})
+
 
 .config(function($stateProvider, $urlRouterProvider) {
 
