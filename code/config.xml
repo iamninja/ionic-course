@@ -17,4 +17,6 @@
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
+  <!-- Allow links to server -->
+  <access origin="https://ionic-songhop.herokuapp.com/*" />
 </widget>
