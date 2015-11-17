@@ -73,6 +73,7 @@ Controller for the favorites page
 .controller('FavoritesCtrl', function($scope, $window, User) {
 	// get the list of favorites from User service
 	$scope.favorites = User.favorites;
+	$scope.username = User.username;
 
 	$scope.removeSong = function(song, index) {
 		User.removeSongFromFavorites(song, index)
@@ -86,7 +87,7 @@ Controller for the favorites page
 /*
 Controller for our tab bar
 */
-.controller('TabsCtrl', function($scope, Recommendations, User) {
+.controller('TabsCtrl', function($scope, $window, Recommendations, User) {
 	// Stop playback when entering favorites
 	$scope.enteringFavorites = function() {
 		Recommendations.haltSong();
@@ -98,6 +99,28 @@ Controller for our tab bar
 		Recommendations.init();
 	}
 
+	$scope.logout = function() {
+		User.destroySession();
+
+		// redirect to ensure views arent cached
+		$window.location.href = 'index.html';
+	}
+
 	// expose favorites count to the $scope
 	$scope.favCount = User.favoriteCount;
+})
+
+// Splash controller
+.controller('SplashCtrl', function($scope, $state, User) {
+	// attempt to signup/login
+	$scope.submitForm = function(username, signingUp) {
+		User.auth(username, signingUp)
+			.then(function() {
+				// sesison is set, redirect to discover
+				$state.go('tab.discover');
+			}, function() {
+				// Error handling
+				alert('Try another username.');
+			});
+	}
 });
